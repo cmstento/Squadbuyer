@@ -1,33 +1,51 @@
-// *********************************************************************************
-// Server.js - This file is the initial starting point for the Node/Express server.
-// *********************************************************************************
+var expressHandlebars = require ('express-handlebars')
+var express = require("express")
+var fetch = require('isomorphic-fetch')
+var bodyParser = require('body-parser')
 
-// Dependencies
-// =============================================================
-var express = require("express");
-// var bodyParser = require("body-parser");
+var campaignRouter = require('./controllers/campaign_controller')
+var userRouter = require('./controllers/user_controller')
 
-// Sets up the Express App
-// =============================================================
+// Set up the app
 var app = express();
-var PORT = process.env.PORT || 8080;
+var handlebars = expressHandlebars.create({})
 
-// Sets up the Express app to handle data parsing
+app.engine('handlebars', handlebars.engine)
+app.set('view engine', 'handlebars')
 
-// parse application/x-www-form-urlencoded
-// app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
-// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 
-// Static directory to be served
-app.use(express.static("./public"));
+app.use(express.static("./public"))
 
-// Routes
-// =============================================================
-require("./routes/api-routes.js")(app);
+// Api routes
+app.use('/api/campaigns', campaignRouter)
+app.use('/api/users', userRouter)
 
-// Starts the server to begin listening
-// =============================================================
+
+// HTML routes
+app.get('/', function(req,res) {
+  fetch('http://localhost:8080/api/campaigns')
+    .then(response => response.json())
+    .then(campaigns => {
+      fetch('http://localhost:8080/api/users/1')
+        .then(response => response.json())
+        .then(user => res.render('index', { campaigns: campaigns, user: user } ))
+    })
+})
+
+app.get('/user', function(req,res) {
+  fetch('http://localhost:8080/api/users/1/campaigns')
+    .then(response => response.json())
+    .then(campaigns => {
+      fetch('http://localhost:8080/api/users/1')
+        .then(response => response.json())
+        .then(user => res.render('layouts/user', { campaigns: campaigns, user: user } ))
+    })
+})
+
+
+var PORT = process.env.PORT || 8080
+
 app.listen(PORT, function() {
-  console.log("App listening on PORT " + PORT);
-});
+  console.log("App listening on PORT " + PORT)
+})

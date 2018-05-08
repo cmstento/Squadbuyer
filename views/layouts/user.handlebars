@@ -5,17 +5,17 @@
 
     <body class="bg-light">
         <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-            <a class="navbar-brand mr-auto mr-lg-0" href="/" style="color: rgb(161, 161, 161)">Campaigns</a>
-            <a class="navbar-brand mr-auto mr-lg-0 pl-4" href="/user">Profile</a>
+            <a class="navbar-brand mr-auto mr-lg-0" href="/">Campaigns</a>
+            <a class="navbar-brand mr-auto mr-lg-0 pl-4" href="/user" style="color: rgb(161, 161, 161)">Profile</a>
         </nav>
         <main role="main" class="container" style="position: relative; top: 100px" data-user-id="{{user.id}}">
-            <h1>Available Campaigns</h1>
+            <h1>Your Campaigns</h1>
             {{#each campaigns}}
                 <div class="my-3 p-3 bg-white rounded box-shadow" style="position: relative" data-id="{{id}}">
                     <h2>{{name}}</h2>
                     <p>{{details}}</p>
                     <span>{{commits_needed}}</span>
-                    <span class="add-campaign-button" style="color: rgb(74, 204, 74);font-weight: 500; position: absolute; top: 5; right: 5; cursor: pointer; border-radius: 3px; border: 1px solid rgb(74, 204, 74); padding: 4px; font-size: 12px">Add campaign</span>
+                    <span class="remove-campaign-button" style="color: rgb(201, 18, 18);font-weight: 500; position: absolute; top: 5; right: 5; cursor: pointer; border-radius: 3px; border: 1px solid rgb(201, 18, 18); padding: 4px; font-size: 12px">Remove campaign</span>
                 </div>
             {{/each}}
         </main>
