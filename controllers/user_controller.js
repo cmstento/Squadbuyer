@@ -4,11 +4,13 @@ var campaignModel = require('../db/models/campaign')
 var express = require('express')
 var router = express.Router()
 
+// Get all of the users
 router.get('/', function (req, res) {
     userModel.User.findAll()
         .then(users => res.send(users))
 })
 
+// Get a User given a userId
 router.get('/:userId', function (req, res) {
     userModel.User.find({
         where: {
@@ -17,6 +19,7 @@ router.get('/:userId', function (req, res) {
     }).then(users => res.send(users))
 })
 
+// Get all campaigns for a given userId
 router.get('/:userId/campaigns', function (req, res) {
     campaignsUsersModel.CampaignsUsers.findAll({
         where: {
@@ -27,6 +30,7 @@ router.get('/:userId/campaigns', function (req, res) {
     })
 })
 
+// Create an association between a userId and campaignId
 router.post('/:userId/campaigns/:campaignId', function (req, res) {
     campaignsUsersModel.CampaignsUsers.create({
         userId: req.params.userId,
@@ -34,6 +38,7 @@ router.post('/:userId/campaigns/:campaignId', function (req, res) {
     }).then(response => res.send(response))
 })
 
+// Delete an association between a userId and campaignId
 router.delete('/:userId/campaigns/:campaignId', function (req, res) {
     campaignsUsersModel.CampaignsUsers.destroy({
         where: {
